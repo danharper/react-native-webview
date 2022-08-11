@@ -785,7 +785,7 @@ export interface MacOSWebViewProps extends WebViewSharedProps {
    *
    * field=value; domain=.example.com; path=/; Secure;, field2=value2; domain=.example.com; path=/
    *
-   * @platform ios
+   * @platform macos
    */
    cookies?: string;
 
