@@ -1506,10 +1506,12 @@ didFinishNavigation:(WKNavigation *)navigation
   }
   
   if (_cookies) {
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:_cookies, @"Set-Cookie", nil];
     NSURL *urlString = [NSURL URLWithString:_source[@"uri"]];
-    NSArray *httpCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:headers forURL:urlString];
-    [cookiesToSet addObjectsFromArray:httpCookies];
+    for (NSString* cookie in _cookies) {
+      NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:cookie, @"Set-Cookie", nil];
+      NSArray *httpCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:headers forURL:urlString];
+      [cookiesToSet addObjectsFromArray:httpCookies];
+    }
   }
   
   [self writeCookiesToWebView:cookiesToSet completion:completion];

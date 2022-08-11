@@ -433,18 +433,16 @@ export interface IOSWebViewProps extends WebViewSharedProps {
   /**
    * Cookies in a format applicable for the Set-Cookie HTTP header
    * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
-   * Multiple cookies separated by a comma.
    *
    * These will be applied on the WebView for use in both the initial request,
    * and future requests within it (e.g. ajax requests).
    *
-   * Example of 2 cookies in Set-Cookie format:
-   *
-   * field=value; domain=.example.com; path=/; Secure;, field2=value2; domain=.example.com; path=/
+   * Example of a cookie in Set-Cookie format:
+   * field=value; domain=.example.com; path=/; Secure;
    *
    * @platform ios
    */
-  cookies?: string;
+  cookies?: string[];
 
   /**
    * A floating-point number that determines how quickly the scroll view
@@ -776,18 +774,16 @@ export interface MacOSWebViewProps extends WebViewSharedProps {
   /**
    * Cookies in a format applicable for the Set-Cookie HTTP header
    * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
-   * Multiple cookies separated by a comma.
    *
    * These will be applied on the WebView for use in both the initial request,
    * and future requests within it (e.g. ajax requests).
    *
-   * Example of 2 cookies in Set-Cookie format:
-   *
-   * field=value; domain=.example.com; path=/; Secure;, field2=value2; domain=.example.com; path=/
+   * Example of a cookie in Set-Cookie format:
+   * field=value; domain=.example.com; path=/; Secure
    *
    * @platform macos
    */
-   cookies?: string;
+   cookies?: string[];
 
   /**
    * Boolean value that determines whether scrolling is enabled in the
