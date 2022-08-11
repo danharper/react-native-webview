@@ -688,14 +688,6 @@ RCTAutoInsetsProtocol>
     [_webView loadHTMLString:html baseURL:baseURL];
     return;
   }
-  // Add cookie for subsequent resource requests sent by page itself, if cookie was set in headers on WebView
-  NSString *headerCookie = [RCTConvert NSString:_source[@"headers"][@"cookie"]];
-  if(headerCookie) {
-    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:headerCookie,@"Set-Cookie",nil];
-    NSURL *urlString = [NSURL URLWithString:_source[@"uri"]];
-    NSArray *httpCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:headers forURL:urlString];
-    [self writeCookiesToWebView:httpCookies completion:nil];
-  }
   
   NSURLRequest *request = [self requestForSource:_source];
   
@@ -1486,7 +1478,7 @@ didFinishNavigation:(WKNavigation *)navigation
 
 - (void)writeCookiesToWebView:(NSArray<NSHTTPCookie *>*)cookies completion:(void (^)(void))completion {
   // The required cookie APIs only became available on iOS 11
-  if(_sharedCookiesEnabled && @available(iOS 11.0, *)) {
+  if (@available(iOS 11.0, *) && [cookies count] > 0) {
     dispatch_async(dispatch_get_main_queue(), ^{
       dispatch_group_t group = dispatch_group_create();
       for (NSHTTPCookie *cookie in cookies) {
@@ -1507,8 +1499,20 @@ didFinishNavigation:(WKNavigation *)navigation
 }
 
 - (void)syncCookiesToWebView:(void (^)(void))completion {
-  NSArray<NSHTTPCookie *> *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies];
-  [self writeCookiesToWebView:cookies completion:completion];
+  NSMutableArray<NSHTTPCookie*>* cookiesToSet = [NSMutableArray array];
+  
+  if (_sharedCookiesEnabled) {
+    [cookiesToSet addObjectsFromArray:[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies]];
+  }
+  
+  if (_cookies) {
+    NSDictionary *headers = [NSDictionary dictionaryWithObjectsAndKeys:_cookies, @"Set-Cookie", nil];
+    NSURL *urlString = [NSURL URLWithString:_source[@"uri"]];
+    NSArray *httpCookies = [NSHTTPCookie cookiesWithResponseHeaderFields:headers forURL:urlString];
+    [cookiesToSet addObjectsFromArray:httpCookies];
+  }
+  
+  [self writeCookiesToWebView:cookiesToSet completion:completion];
 }
 
 - (void)resetupScripts:(WKWebViewConfiguration *)wkWebViewConfig {

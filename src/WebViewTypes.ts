@@ -431,6 +431,22 @@ export interface IOSWebViewProps extends WebViewSharedProps {
   bounces?: boolean;
 
   /**
+   * Cookies in a format applicable for the Set-Cookie HTTP header
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+   * Multiple cookies separated by a comma.
+   *
+   * These will be applied on the WebView for use in both the initial request,
+   * and future requests within it (e.g. ajax requests).
+   *
+   * Example of 2 cookies in Set-Cookie format:
+   *
+   * field=value; domain=.example.com; path=/; Secure;, field2=value2; domain=.example.com; path=/
+   *
+   * @platform ios
+   */
+  cookies?: string;
+
+  /**
    * A floating-point number that determines how quickly the scroll view
    * decelerates after the user lifts their finger. You may also use the
    * string shortcuts `"normal"` and `"fast"` which match the underlying iOS
@@ -756,6 +772,22 @@ export interface MacOSWebViewProps extends WebViewSharedProps {
    * @platform macos
    */
   bounces?: boolean;
+
+  /**
+   * Cookies in a format applicable for the Set-Cookie HTTP header
+   * https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie
+   * Multiple cookies separated by a comma.
+   *
+   * These will be applied on the WebView for use in both the initial request,
+   * and future requests within it (e.g. ajax requests).
+   *
+   * Example of 2 cookies in Set-Cookie format:
+   *
+   * field=value; domain=.example.com; path=/; Secure;, field2=value2; domain=.example.com; path=/
+   *
+   * @platform ios
+   */
+   cookies?: string;
 
   /**
    * Boolean value that determines whether scrolling is enabled in the
